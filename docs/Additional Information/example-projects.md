@@ -32,7 +32,7 @@ The [Chainlink Spring 2021 Hackathon](https://chain.link/hackathon/spring-2021),
 | **deBridge**<br />🥇               | Cross-chain defi primative        | [Go](https://github.com/debridge-finance)                                         |
 | **Vulcan Exchange**<br />🥇        | Weather derivatives defi platform | [Go](https://github.com/Vulcan-Exchange?ref=block123)                             |
 | **DeFi Lending Insurance**<br />🥇 | DeFi Lending Insurance            | [Go](https://github.com/chainlink-hackathon2021-insurance/DeFi-Lending-Insurance) |
-| **Fract**<br />🥇                  | Dynamic NFT no-code UI creator    | [Go](https://github.com/FractioXYZ)                                               |
+| **Fract**<br />🥇                  | Dynamic NFT no-code UI creator    | [Go](https://github.com/Alchemist21/fraxio_framework)                                               |
 
 ## ETH Global's ETHOnline 2020
 
