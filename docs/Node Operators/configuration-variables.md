@@ -18,7 +18,7 @@ The environment variables listed here are explicitly supported and current as of
 
 As of Chainlink node v1.1.0 and up, the way nodes manage configuration is changing. Previously, environment variables exclusively handled all node configuration. Although this configuration method worked well in the past, it has its limitations. Notably, it doesn't mesh well with chain-specific configuration profiles.
 
-For this reason, Chainlink nodes are moving towards a model where you set variables using the API, [CLI](/docs/configuration-variables/#cli-client), or GUI, and the configuration is saved in the database. We encourage you to become familiar with this model because it is likely that nodes will continue to move away from environment variable configuration in the future.
+For this reason, Chainlink nodes are moving towards a model where you set variables using the API, CLI, or GUI, and the configuration is saved in the database. We encourage you to become familiar with this model because it is likely that nodes will continue to move away from environment variable configuration in the future.
 
 As of v1.1.0, Chainlink nodes still support environment variables to configure node settings and chain-specific settings. If the environment variable is set, it overrides any chain-specific, job-specific, or database configuration setting. The log displays a warning to indicate when an override happens, so you know when variables lower in the hierarchy are being ignored.
 
@@ -134,8 +134,8 @@ Your node applies configuration settings using following hierarchy:
   - [ETH_LOG_POLL_INTERVAL](#eth_log_poll_interval)
   - [ETH_RPC_DEFAULT_BATCH_SIZE](#eth_rpc_default_batch_size)
   - [LINK_CONTRACT_ADDRESS](#link_contract_address)
+  - [OPERATOR_FACTORY_ADDRESS](#operator_factory_address)
   - [MIN_INCOMING_CONFIRMATIONS](#min_incoming_confirmations)
-  - [MIN_OUTGOING_CONFIRMATIONS](#min_outgoing_confirmations)
   - [MINIMUM_CONTRACT_PAYMENT_LINK_JUELS](#minimum_contract_payment_link_juels)
   - [NODE_NO_NEW_HEADS_THRESHOLD](#node_no_new_heads_threshold)
   - [NODE_POLL_FAILURE_THRESHOLD](#node_poll_failure_threshold)
@@ -210,10 +210,6 @@ Your node applies configuration settings using following hierarchy:
   - [KEEPER_REGISTRY_SYNC_UPKEEP_QUEUE_SIZE](#keeper_registry_sync_upkeep_queue_size)
   - [KEEPER_TURN_LOOK_BACK](#keeper_turn_look_back)
   - [KEEPER_TURN_FLAG_ENABLED](#keeper_turn_flag_enabled)
-- [CLI Client](#cli-client)
-  - [ADMIN_CREDENTIALS_FILE](#admin_credentials_file)
-  - [CLIENT_NODE_URL](#client_node_url)
-  - [INSECURE_SKIP_VERIFY](#insecure_skip_verify)
 - [Notes on setting environment variables](#notes-on-setting-environment-variables)
 
 ## Essential environment variables
@@ -670,7 +666,7 @@ Do not change this setting unless you know what you are doing.
 
 - Default: `"6688"`
 
-Port used for the Chainlink Node API, [CLI](/docs/configuration-variables/#cli-client), and GUI.
+Port used for the Chainlink Node API, CLI, and GUI.
 
 ### SECURE_COOKIES
 
@@ -752,17 +748,17 @@ The location of the TLS private key file. Example: `/home/$USER/.chainlink/tls/s
 
 Previous Chainlink node versions supported only one chain. From v1.1.0 and up, Chainlink nodes support multiple EVM and non-EVM chains, so the way that chains and nodes are configured has changed.
 
-The preferred way of configuring Chainlink nodes as of v1.1.0 and up is to use the API, [CLI](/docs/configuration-variables/#cli-client), or UI to set chain-specific configuration and create nodes.
+The preferred way of configuring Chainlink nodes as of v1.1.0 and up is to use the API, CLI, or UI to set chain-specific configuration and create nodes.
 
 The old way of specifying chains using environment variables is still supported, but discouraged. It works as follows:
 
 If you set any value for `ETH_URL`, the values of `ETH_CHAIN_ID`, `ETH_URL`, `ETH_HTTP_URL` and `ETH_SECONDARY_URLS` will be used to create and update chains and nodes representing these values in the database. If an existing chain or node is found, it will be overwritten. This mode is used mainly to ease the process of upgrading. On subsequent runs (once your old settings have been written to the database) it is recommended to unset `ETH_URL` and use the API commands exclusively to administer chains and nodes.
 
-In the future, support for the `ETH_URL` and associated environment variables might be removed, so it is recommended to use the API, [CLI](/docs/configuration-variables/#cli-client), or GUI instead to setup chains and nodes.
+In the future, support for the `ETH_URL` and associated environment variables might be removed, so it is recommended to use the API, CLI, or GUI instead to setup chains and nodes.
 
 ### ETH_URL
 
-Setting this will enable "legacy eth ENV" mode, which is not compatible with multi-chain. It is better to configure settings using the API, [CLI](/docs/configuration-variables/#cli-client), or GUI instead.
+Setting this will enable "legacy eth ENV" mode, which is not compatible with multi-chain. It is better to configure settings using the API, CLI, or GUI instead.
 
 - Default: _none_
 
@@ -772,7 +768,7 @@ NOTE: It is also required to set `ETH_CHAIN_ID` if you set ETH_URL.
 
 ### ETH_HTTP_URL
 
-Only has effect if `ETH_URL` set. Otherwise, it can be set in the API, [CLI](/docs/configuration-variables/#cli-client), or GUI.
+Only has effect if `ETH_URL` set. Otherwise, it can be set in the API, CLI, or GUI.
 
 - Default: _none_
 
@@ -841,7 +837,7 @@ EVM_NODES='
 
 ### ETH_SECONDARY_URLS
 
-Only has effect if `ETH_URL` set. Otherwise, it can be set in the API, [CLI](/docs/configuration-variables/#cli-client), or GUI.
+Only has effect if `ETH_URL` set. Otherwise, it can be set in the API, CLI, or GUI.
 
 - Default: _none_
 
@@ -901,7 +897,7 @@ This might be useful on fast chains and if only recent chain events are relevant
 
 ### ETH_TX_REAPER_INTERVAL
 
-NOTE: This overrides the setting for _all_ chains, you might want to set this on a per-chain basis using the API, [CLI](/docs/configuration-variables/#cli-client), or GUI instead
+NOTE: This overrides the setting for _all_ chains, you might want to set this on a per-chain basis using the API, CLI, or GUI instead
 
 - Default: `"1h"`
 
@@ -922,7 +918,7 @@ Setting to `0` disables the reaper.
 
 ### ETH_TX_RESEND_AFTER_THRESHOLD
 
-NOTE: This overrides the setting for _all_ chains, you might want to set this on a per-chain basis using the API, [CLI](/docs/configuration-variables/#cli-client), or GUI instead.
+NOTE: This overrides the setting for _all_ chains, you might want to set this on a per-chain basis using the API, CLI, or GUI instead.
 
 - Default: _automatically set based on Chain ID, typically 1m_
 
@@ -939,7 +935,10 @@ The number of blocks after which an Ethereum transaction is considered "final".
 `ETH_FINALITY_DEPTH` determines how deeply we look back to ensure that transactions are confirmed onto the longest chain. There is not a large performance penalty to setting this relatively high (on the order of hundreds).
 
 It is practically limited by the number of heads we store in the database (`HEAD_TRACKER_HISTORY_DEPTH`) and should be less than this with a comfortable margin.
+
 If a transaction is mined in a block more than this many blocks ago, and is reorged out, we will NOT retransmit this transaction and undefined behavior can occur including gaps in the nonce sequence that require manual intervention to fix. Therefore, this number represents a number of blocks we consider large enough that no re-org this deep will ever feasibly happen.
+
+`ETH_FINALITY_DEPTH` is used as the default for `ethtx` confirmations. You can override this on a per-task basis by setting `minConfirmations` in the task definition. For example, `foo [type=ethtx minConfirmations=42 ...]`.
 
 ### ETH_HEAD_TRACKER_HISTORY_DEPTH
 
@@ -989,6 +988,12 @@ The address of the LINK token contract. It is not essential to provide this, but
 
 This environment variable is a global override. It is recommended instead to set this on a per-chain basis.
 
+### OPERATOR_FACTORY_ADDRESS
+
+- Default: _automatic based on Chain ID_
+
+This address represents the address of the official LINK token contract on the current chain.
+
 ### MIN_INCOMING_CONFIRMATIONS
 
 - Default: _automatic based on chain ID, typically 3_
@@ -1001,17 +1006,6 @@ You can override this on a per-job basis.
 
 > ⚠️ NOTE
 > The lowest value allowed here is 1, since setting to 0 would imply that logs are processed from the mempool before they are even mined into a block, which isn't possible with Chainlink's current architecture.
-
-### MIN_OUTGOING_CONFIRMATIONS
-
-- Default: _automatic based on chain ID, typically 12_
-
-The default minimum number of block confirmations that need to be recorded on an outgoing `ethtx` task before the run can move onto the next task.
-
-This can be overridden on a per-task basis by setting the `MinRequiredOutgoingConfirmations` parameter.
-
-`MIN_OUTGOING_CONFIRMATIONS=1` considers a transaction as "done" once it has been mined into one block.
-`MIN_OUTGOING_CONFIRMATIONS=0` would consider a transaction as "done" even before it has been mined.
 
 ### MINIMUM_CONTRACT_PAYMENT_LINK_JUELS
 
@@ -1054,7 +1048,7 @@ Set to zero to disable poll checking.
 
 These settings allow you to tune your node's gas limits and pricing. In most cases, leaving these values at their defaults should give good results.
 
-As of Chainlink node v1.1.0, it is recommended to use the API, [CLI](/docs/configuration-variables/#cli-client), or GUI to configure gas controls because you might want to use different settings for different chains. Setting the environment variable typically overrides the setting for all chains.
+As of Chainlink node v1.1.0, it is recommended to use the API, CLI, or GUI to configure gas controls because you might want to use different settings for different chains. Setting the environment variable typically overrides the setting for all chains.
 
 ### Configuring your ETH node
 
@@ -1289,7 +1283,7 @@ Enables or disables sending transactions through forwarder contracts.
 
 These settings allow you to configure how your node calculates gas prices. In most cases, leaving these values at their defaults should give good results.
 
-As of Chainlink node v1.1.0, it is recommended to use the API, [CLI](/docs/configuration-variables/#cli-client), or GUI to configure gas controls because you might want to use different settings for different chains. Setting the environment variable typically overrides the setting for all chains.
+As of Chainlink node v1.1.0, it is recommended to use the API, CLI, or GUI to configure gas controls because you might want to use different settings for different chains. Setting the environment variable typically overrides the setting for all chains.
 
 Chainlink nodes decide what gas price to use using an `Estimator`. It ships with several simple and battle-hardened built-in estimators that should work well for almost all use-cases. Note that estimators will change their behaviour slightly depending on if you are in EIP-1559 mode or not.
 
@@ -1635,37 +1629,6 @@ The number of blocks in the past to look back when getting a block for a turn.
 - Default: `"false"`
 
 Enables a new algorithm for how keepers take turns.
-
-## CLI Client
-
-The environment variables in this section apply only when running CLI commands that connect to a remote running instance of a Chainlink node.
-
-### ADMIN_CREDENTIALS_FILE
-
-- Default: `$ROOT/apicredentials`
-
-`ADMIN_CREDENTIALS_FILE` optionally points to a text file containing admin credentials for logging in. It is useful for running client CLI commands and has no effect when passed to a running node.
-
-The file should contain two lines, the first line is the username and second line is the password.
-e.g.
-```
-myusername@example.com
-mysecurepassw0rd
-```
-
-### CLIENT_NODE_URL
-
-- Default: `"http://localhost:6688"`
-
-This is the URL that you will use to interact with the node, including the GUI. Use this URL to connect to the GUI or to run commands remotely using the Chainlink CLI.
-
-### INSECURE_SKIP_VERIFY
-
-- Default: `"false"`
-
-`INSECURE_SKIP_VERIFY` disables SSL certificate verification when connection to a Chainlink node using the remote client. For example, when executing most remote commands in the CLI. This is mostly useful for people who want to use TLS on localhost.
-
-It is not recommended to change this unless you know what you are doing.
 
 ## Notes on setting environment variables
 
